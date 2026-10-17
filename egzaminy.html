@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekomendacja Finansowa</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --primary: #2ecc71;
+            --primary-dark: #27ae60;
+            --text: #2c3e50;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .app-container {
+            width: 100%;
+            max-width: 450px;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-size: 22px;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 25px;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #edf2f7;
+            padding-bottom: 5px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccd1d1;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: var(--primary-dark);
+        }
+        .result-box {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #ebf5fb;
+            border-left: 5px solid #3498db;
+            display: none;
+        }
+        .recommendation {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <h1>📊 Kalkulator Finansowy</h1>
+    <div class="subtitle">System automatycznej rekomendacji</div>
+
+    <!-- Opcja A -->
+    <div class="section-title">OPCJA A</div>
+    <div class="input-group">
+        <label>Nazwa opcji:</label>
+        <input type="text" id="nazwaA" value="Inwestycja A">
+    </div>
+    <div class="input-group">
+        <label>Przychód (zł):</label>
+        <input type="number" id="przychodA" placeholder="0">
+    </div>
+    <div class="input-group">
+        <label>Koszt (zł):</label>
+        <input type="number" id="kosztA" placeholder="0">
+    </div>
+
+    <!-- Opcja B -->
+    <div class="section-title">OPCJA B</div>
+    <div class="input-group">
+        <label>Nazwa opcji:</label>
+        <input type="text" id="nazwaB" value="Inwestycja B">
+    </div>
+    <div class="input-group">
+        <label>Przychód (zł):</label>
+        <input type="number" id="przychodB" placeholder="0">
+    </div>
+    <div class="input-group">
+        <label>Koszt (zł):</label>
+        <input type="number" id="kosztB" placeholder="0">
+    </div>
+
+    <button onclick="obliczRekomendacje()">SPRAWDŹ CO NAJLEPSZE</button>
+
+    <!-- Miejsce na wynik -->
+    <div id="wynikBox" class="result-box">
+        <div class="recommendation" id="rekomendacjaTekst"></div>
+        <div id="szczegolyTekst"></div>
+    </div>
+</div>
+
+<script>
+function obliczRekomendacje() {
+    // Pobieranie danych
+    const nazwaA = document.getElementById('nazwaA').value || 'Opcja A';
+    const przychodA = parseFloat(document.getElementById('przychodA').value) || 0;
+    const kosztA = parseFloat(document.getElementById('kosztA').value) || 0;
+
+    const nazwaB = document.getElementById('nazwaB').value || 'Opcja B';
+    const przychodB = parseFloat(document.getElementById('przychodB').value) || 0;
+    const kosztB = parseFloat(document.getElementById('kosztB').value) || 0;
+
+    // Obliczenia
+    const zyskA = przychodA - kosztA;
+    const zyskB = przychodB - kosztB;
+
+    const wynikBox = document.getElementById('wynikBox');
+    const rekomendacjaTekst = document.getElementById('rekomendacjaTekst');
+    const szczegolyTekst = document.getElementById('szczegolyTekst');
+
+    wynikBox.style.display = "block";
+
+    // Logika wyboru najlepszej opcji
+    if (zyskA > zyskB) {
+        rekomendacjaTekst.innerHTML = `🎯 Rekomendacja: Wybierz "${nazwaA}"`;
+        szczegolyTekst.innerHTML = `Przyniesie ona <strong>${zyskA.toFixed(2)} zł</strong> czystego zysku (o ${(zyskA - zyskB).toFixed(2)} zł więcej niż druga opcja).`;
+    } else if (zyskB > zyskA) {
+        rekomendacjaTekst.innerHTML = `🎯 Rekomendacja: Wybierz "${nazwaB}"`;
+        szczegolyTekst.innerHTML = `Przyniesie ona <strong>${zyskB.toFixed(2)} zł</strong> czystego zysku (o ${(zyskB - zyskA).toFixed(2)} zł więcej niż druga opcja).`;
+    } else {
+        rekomendacjaTekst.innerHTML = `⚖️ Obie opcje są tak samo zyskowne`;
+        szczegolyTekst.innerHTML = `Zysk z obu inwestycji wynosi dokładnie tyle samo: <strong>${zyskA.toFixed(2)} zł</strong>. Wybierz tę, która wydaje Ci się bezpieczniejsza.`;
+    }
+}
+</script>
+
+</body>
+</html>
